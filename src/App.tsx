@@ -12,42 +12,59 @@ function App() {
       <div className={styles.atmospherePrimary} />
       <div className={styles.atmosphereAccent} />
 
-      <section ref={boardRef} className={styles.board}>
+      <div className={styles.workspace}>
         <header className={styles.toolbar} data-role="toolbar">
-          <p className={styles.kicker}>Graph Playground</p>
-          <h1 className={styles.title}>Desk Flow</h1>
-          <div className={styles.rendererToggle}>
-            <button
-              type="button"
-              className={renderMode === "dom" ? styles.modeButtonActive : styles.modeButton}
-              onClick={() => setRenderMode("dom")}
-            >
-              DOM
-            </button>
-            <button
-              type="button"
-              className={renderMode === "webgpu" ? styles.modeButtonActive : styles.modeButton}
-              onClick={() => setRenderMode("webgpu")}
-              disabled={!webGpuAvailable}
-              title={!webGpuAvailable ? "WebGPU is unavailable in this browser." : "Switch to WebGPU renderer"}
-            >
-              WebGPU
-            </button>
+          <div>
+            <h1 className={styles.title}>Graph Draft</h1>
+          </div>
+          <div className={styles.toolbarControls}>
+            <div className={styles.rendererToggle}>
+              <button
+                type="button"
+                className={renderMode === "dom" ? styles.modeButtonActive : styles.modeButton}
+                onClick={() => setRenderMode("dom")}
+              >
+                DOM
+              </button>
+              <button
+                type="button"
+                className={renderMode === "webgpu" ? styles.modeButtonActive : styles.modeButton}
+                onClick={() => setRenderMode("webgpu")}
+                disabled={!webGpuAvailable}
+                title={!webGpuAvailable ? "WebGPU is unavailable in this browser." : "Switch to WebGPU renderer"}
+              >
+                WebGPU
+              </button>
+            </div>
           </div>
         </header>
 
-        {renderMode === "dom" ? (
-          <DomGraphRenderer
-            edges={edges}
-            nodeById={nodeById}
-            nodes={nodes}
-            onNodeDragStart={onNodeDragStart}
-            viewport={viewport}
-          />
-        ) : (
-          <WebGpuGraphRenderer edges={edges} nodes={nodes} viewport={viewport} />
-        )}
-      </section>
+        <section ref={boardRef} className={styles.board}>
+          <nav className={styles.quickMenu} data-role="toolbar">
+            <button type="button" className={styles.menuItemActive}>
+              Workspace
+            </button>
+            <button type="button" className={styles.menuItem}>
+              Analytics
+            </button>
+            <button type="button" className={styles.menuItem}>
+              Layers
+            </button>
+          </nav>
+
+          {renderMode === "dom" ? (
+            <DomGraphRenderer
+              edges={edges}
+              nodeById={nodeById}
+              nodes={nodes}
+              onNodeDragStart={onNodeDragStart}
+              viewport={viewport}
+            />
+          ) : (
+            <WebGpuGraphRenderer edges={edges} nodes={nodes} viewport={viewport} />
+          )}
+        </section>
+      </div>
     </main>
   );
 }

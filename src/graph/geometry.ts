@@ -11,10 +11,52 @@ export type EdgeCurve = {
   ty: number;
 };
 
+export type NodeBounds = {
+  centerX: number;
+  centerY: number;
+  height: number;
+  maxX: number;
+  maxY: number;
+  minX: number;
+  minY: number;
+  width: number;
+};
+
 export const createNodeMap = (nodes: NodeType[]) => {
   const map = new Map<string, NodeType>();
   nodes.forEach((node) => map.set(node.id, node));
   return map;
+};
+
+export const getNodesBounds = (nodes: NodeType[]): NodeBounds | undefined => {
+  if (nodes.length === 0) return undefined;
+
+  let minX = nodes[0].position.x;
+  let minY = nodes[0].position.y;
+  let maxX = nodes[0].position.x + nodes[0].width;
+  let maxY = nodes[0].position.y + nodes[0].height;
+
+  for (let i = 1; i < nodes.length; i += 1) {
+    const node = nodes[i];
+    minX = Math.min(minX, node.position.x);
+    minY = Math.min(minY, node.position.y);
+    maxX = Math.max(maxX, node.position.x + node.width);
+    maxY = Math.max(maxY, node.position.y + node.height);
+  }
+
+  const width = maxX - minX;
+  const height = maxY - minY;
+
+  return {
+    centerX: minX + width / 2,
+    centerY: minY + height / 2,
+    height,
+    maxX,
+    maxY,
+    minX,
+    minY,
+    width,
+  };
 };
 
 export const getEdgeCurve = (sourceNode: NodeType, targetNode: NodeType): EdgeCurve => {

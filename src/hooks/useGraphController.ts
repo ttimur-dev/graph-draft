@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { boardPointToWorld, getBoardPointFromClient } from "../graph/coordinates";
-import { createNodeMap, getTopNodeAtPoint } from "../graph/geometry";
+import { createNodeMap, getNodesBounds, getTopNodeAtPoint } from "../graph/geometry";
 import type { RenderMode, ViewportType } from "../types/common";
 import type { EdgeType } from "../types/edge";
 import type { NodeDragStartHandler, NodeType } from "../types/node";
@@ -37,6 +37,7 @@ export const useGraphController = () => {
   const [renderMode, setRenderMode] = useState<RenderMode>("dom");
 
   const boardRef = useRef<HTMLDivElement>(null);
+  const hasInitialCenterRef = useRef(false);
   const viewportRef = useRef(viewport);
   const nodesRef = useRef(nodes);
 
@@ -67,6 +68,46 @@ export const useGraphController = () => {
   useEffect(() => {
     nodesRef.current = nodes;
   }, [nodes]);
+
+  const centerSceneOnStart = useCallback(() => {
+    if (hasInitialCenterRef.current) return;
+
+    const boardEl = boardRef.current;
+    if (!boardEl) return;
+
+    const rect = boardEl.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+
+    const bounds = getNodesBounds(nodesRef.current);
+    if (!bounds) return;
+
+    setViewport((current) => ({
+      ...current,
+      panX: rect.width / 2 - bounds.centerX * current.zoom,
+      panY: rect.height / 2 - bounds.centerY * current.zoom,
+    }));
+
+    hasInitialCenterRef.current = true;
+  }, []);
+
+  useEffect(() => {
+    centerSceneOnStart();
+  }, [centerSceneOnStart, nodes]);
+
+  useEffect(() => {
+    const boardEl = boardRef.current;
+    if (!boardEl || hasInitialCenterRef.current) return;
+
+    const observer = new ResizeObserver(() => {
+      centerSceneOnStart();
+    });
+
+    observer.observe(boardEl);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [centerSceneOnStart]);
 
   const getWorldFromClient = useCallback((clientX: number, clientY: number, currentViewport: ViewportType) => {
     const boardEl = boardRef.current;

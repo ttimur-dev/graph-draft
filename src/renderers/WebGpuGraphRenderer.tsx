@@ -17,8 +17,8 @@ const GPU_BUFFER_USAGE_UNIFORM = 0x0040;
 const GPU_SHADER_STAGE_VERTEX = 0x1;
 const GPU_COLOR_WRITE_ALL = 0xf;
 
-const NODE_COLOR: [number, number, number, number] = [1.0, 0.91, 0.8, 0.96];
-const EDGE_COLOR: [number, number, number, number] = [1.0, 0.48, 0.2, 0.95];
+const NODE_COLOR: [number, number, number, number] = [0.14, 0.21, 0.31, 0.94];
+const EDGE_COLOR: [number, number, number, number] = [0.33, 0.89, 0.84, 0.95];
 
 const SHADER = `
 struct Uniforms {

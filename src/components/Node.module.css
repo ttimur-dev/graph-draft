@@ -4,34 +4,37 @@
   justify-content: center;
   user-select: none;
   cursor: grab;
-  border-radius: 14px;
-  border: 1px solid rgba(23, 47, 73, 0.22);
-  background: linear-gradient(165deg, #fffdf8 0%, #ffe8cf 100%);
-  color: #1d2f43;
+  border-radius: 12px;
+  border: 1px solid rgba(150, 178, 225, 0.26);
+  background:
+    linear-gradient(145deg, rgba(36, 53, 79, 0.86) 0%, rgba(21, 33, 50, 0.9) 100%),
+    linear-gradient(180deg, rgba(244, 252, 255, 0.08) 0%, transparent 50%);
+  color: #e8f1ff;
   box-shadow:
-    0 10px 22px rgba(19, 45, 78, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85);
-  transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease;
+    0 10px 24px rgba(2, 8, 17, 0.45),
+    inset 0 1px 0 rgba(205, 226, 255, 0.12);
+  transition: box-shadow 150ms ease, border-color 150ms ease, background-color 150ms ease;
 }
 
 .node:hover {
-  border-color: rgba(14, 159, 140, 0.52);
+  border-color: rgba(84, 222, 216, 0.66);
   box-shadow:
-    0 14px 26px rgba(15, 44, 79, 0.2),
-    0 0 0 2px rgba(14, 159, 140, 0.1);
-  transform: translateY(-1px);
+    0 12px 26px rgba(5, 12, 23, 0.54),
+    0 0 0 1px rgba(93, 115, 255, 0.45),
+    0 0 20px rgba(79, 198, 225, 0.2);
 }
 
 .node:active {
   cursor: grabbing;
-  transform: scale(0.985);
   box-shadow:
-    0 6px 14px rgba(15, 44, 79, 0.24),
-    0 0 0 2px rgba(255, 136, 64, 0.18);
+    0 6px 14px rgba(6, 12, 22, 0.55),
+    0 0 0 2px rgba(79, 198, 225, 0.3);
 }
 
 .label {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
+  color: #eaf3ff;
+  text-transform: uppercase;
 }

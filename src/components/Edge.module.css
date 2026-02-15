@@ -1,9 +1,9 @@
 .edgePath {
   fill: none;
-  stroke: #ff7a33;
-  stroke-width: 2.8;
+  stroke: #54e3d6;
+  stroke-width: 2.4;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 5px rgba(255, 122, 51, 0.35));
+  filter: drop-shadow(0 0 7px rgba(84, 227, 214, 0.38));
   opacity: 0.95;
-  transition: stroke 160ms ease, filter 160ms ease;
+  transition: stroke 160ms ease, filter 160ms ease, opacity 160ms ease;
 }
