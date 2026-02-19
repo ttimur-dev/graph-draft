@@ -1,16 +1,17 @@
 import { useState, type KeyboardEvent } from "react";
-import type { ChatDisplayMessage, ChatEngineStatus } from "../model/types";
+import type { ChatDisplayMessage, ChatEngineStatus, EngineLoadingProgress } from "../model/types";
 import styles from "./Chat.module.css";
 
 type Props = {
   engineStatus: ChatEngineStatus;
+  loadingProgress: EngineLoadingProgress | null;
   errorMessage: string | null;
   messages: ChatDisplayMessage[];
   loading: boolean;
   onMessageSend: (rawInput: string) => void;
 };
 
-export const Chat = ({ engineStatus, errorMessage, messages, loading, onMessageSend }: Props) => {
+export const Chat = ({ engineStatus, loadingProgress, errorMessage, messages, loading, onMessageSend }: Props) => {
   const [value, setValue] = useState<string>("");
   const inputDisabled = loading || engineStatus !== "ready";
   const statusText = loading ? "Thinking..." : engineStatus === "ready" ? "Ready" : engineStatus === "loading" ? "Loading model..." : "Unavailable";
@@ -30,17 +31,34 @@ export const Chat = ({ engineStatus, errorMessage, messages, loading, onMessageS
       </header>
 
       <div className={styles.messageList}>
-        {errorMessage ? <div className={styles.assistantMessage}>{errorMessage}</div> : null}
-        {messages.map((msg, index) => {
-          const rowClass = msg.role === "user" ? styles.userRow : styles.assistantRow;
-          const messageClass = msg.role === "user" ? styles.userMessage : styles.assistantMessage;
-
-          return (
-            <div key={index} className={rowClass}>
-              <div className={messageClass}>{msg.content}</div>
+        {engineStatus === "loading" ? (
+          <div className={styles.loadingPanel}>
+            <p className={styles.loadingTitle}>Loading model</p>
+            <div className={styles.progressTrack}>
+              <div
+                className={styles.progressFill}
+                style={{ width: `${Math.round((loadingProgress?.progress ?? 0) * 100)}%` }}
+              />
             </div>
-          );
-        })}
+            {loadingProgress && (
+              <p className={styles.loadingText}>{loadingProgress.text}</p>
+            )}
+          </div>
+        ) : (
+          <>
+            {errorMessage ? <div className={styles.assistantMessage}>{errorMessage}</div> : null}
+            {messages.map((msg, index) => {
+              const rowClass = msg.role === "user" ? styles.userRow : styles.assistantRow;
+              const messageClass = msg.role === "user" ? styles.userMessage : styles.assistantMessage;
+
+              return (
+                <div key={index} className={rowClass}>
+                  <div className={messageClass}>{msg.content}</div>
+                </div>
+              );
+            })}
+          </>
+        )}
       </div>
 
       <div className={styles.inputArea}>

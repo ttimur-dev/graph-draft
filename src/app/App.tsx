@@ -21,7 +21,7 @@ function App() {
     zoomIn,
     zoomOut,
   } = useGraphController();
-  const { displayMessages, engineStatus, errorMessage, loading, onMessageSend } = useLLMChatController({ graphApi, nodes, edges });
+  const { displayMessages, engineStatus, loadingProgress, errorMessage, loading, onMessageSend } = useLLMChatController({ graphApi, nodes, edges });
 
   return (
     <main className={styles.app}>
@@ -113,6 +113,7 @@ function App() {
           </section>
           <Chat
             engineStatus={engineStatus}
+            loadingProgress={loadingProgress}
             errorMessage={errorMessage}
             messages={displayMessages}
             loading={loading}

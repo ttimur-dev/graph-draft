@@ -6,7 +6,7 @@ import type { GraphApi } from "../../graph-editor";
 import { createWorkerEngine } from "../../../lib/web-llm";
 import { buildSystemPrompt } from "./plannerPrompt";
 import { executePlannerActions, parsePlannerResponse } from "./plannerParser";
-import type { ChatDisplayMessage, ChatEngineStatus } from "./types";
+import type { ChatDisplayMessage, ChatEngineStatus, EngineLoadingProgress } from "./types";
 
 type Params = {
   graphApi: GraphApi;
@@ -18,6 +18,7 @@ export const useLLMChatController = ({ graphApi, nodes, edges }: Params) => {
   const [history, setHistory] = useState<ChatCompletionMessageParam[]>([]);
   const [displayMessages, setDisplayMessages] = useState<ChatDisplayMessage[]>([]);
   const [engineStatus, setEngineStatus] = useState<ChatEngineStatus>("idle");
+  const [loadingProgress, setLoadingProgress] = useState<EngineLoadingProgress | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -40,10 +41,16 @@ export const useLLMChatController = ({ graphApi, nodes, edges }: Params) => {
       setErrorMessage(null);
 
       try {
-        const nextEngine = await createWorkerEngine();
+        const nextEngine = await createWorkerEngine({
+          onInitProgress: (report) => {
+            const r = report as { text: string; progress: number };
+            setLoadingProgress({ text: r.text, progress: r.progress });
+          },
+        });
         if (disposed) return;
 
         engine.current = nextEngine;
+        setLoadingProgress(null);
         setEngineStatus("ready");
       } catch {
         if (disposed) return;
@@ -107,5 +114,5 @@ export const useLLMChatController = ({ graphApi, nodes, edges }: Params) => {
     }
   };
 
-  return { displayMessages, engineStatus, errorMessage, loading, onMessageSend };
+  return { displayMessages, engineStatus, loadingProgress, errorMessage, loading, onMessageSend };
 };

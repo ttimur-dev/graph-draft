@@ -93,6 +93,51 @@
   background-clip: padding-box;
 }
 
+.loadingPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+}
+
+.loadingTitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(210, 228, 252, 0.9);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.progressTrack {
+  width: 100%;
+  max-width: 200px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(153, 183, 238, 0.15);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(103, 132, 230, 0.9) 0%, #76e6db 100%);
+  transition: width 400ms ease;
+}
+
+.loadingText {
+  margin: 0;
+  font-size: 11px;
+  color: rgba(170, 200, 240, 0.55);
+  letter-spacing: 0.01em;
+  text-align: center;
+  max-width: 240px;
+  line-height: 1.5;
+}
+
 .assistantRow,
 .userRow {
   display: flex;
