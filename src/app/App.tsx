@@ -1,10 +1,9 @@
-import { useGraphController } from "./hooks/useGraphController";
+import { useGraphController } from "../features/graph-editor";
 import { LocateFixed, Minus, Plus } from "lucide-react";
-import { DomGraphRenderer } from "./renderers/DomGraphRenderer";
-import { WebGpuGraphRenderer } from "./renderers/WebGpuGraphRenderer";
-import { Chat } from "./components/Chat";
-import { useLLMChatController } from "./hooks/useLLMChatController";
-import styles from "./App.module.css";
+import { DomGraphRenderer } from "../features/dom-graph-renderer";
+import { WebGpuGraphRenderer } from "../features/webgpu-renderer";
+import { Chat, useLLMChatController } from "../features/chat";
+import styles from "./ui/App.module.css";
 
 function App() {
   const {
@@ -21,7 +20,7 @@ function App() {
     zoomIn,
     zoomOut,
   } = useGraphController();
-  const { messages, loading, onMessageSend } = useLLMChatController();
+  const { engineStatus, errorMessage, messages, loading, onMessageSend } = useLLMChatController();
 
   return (
     <main className={styles.app}>
@@ -111,7 +110,13 @@ function App() {
               <WebGpuGraphRenderer edges={edges} nodes={nodes} viewport={viewport} />
             )}
           </section>
-          <Chat messages={messages} loading={loading} onMessageSend={onMessageSend} />
+          <Chat
+            engineStatus={engineStatus}
+            errorMessage={errorMessage}
+            messages={messages}
+            loading={loading}
+            onMessageSend={onMessageSend}
+          />
         </div>
       </div>
     </main>
